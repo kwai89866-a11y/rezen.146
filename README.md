@@ -130,7 +130,7 @@
         <label for="q1">✨ 我的降生日是哪一天呢？</label>
         <input type="text" id="q1" placeholder="一定要記得喔 (eg.0101)">
         
-        <label for="q2">🏀 我最喜歡的是什麼運動呢？</label>
+        <label for="q2">😽 我最喜歡的是什麼運動呢？</label>
         <input type="text" id="q2" placeholder="答錯的話我會生氣喔！">
         
         <button onclick="checkAnswers()">驗證身份 (//●⁰౪⁰●//)</button>
