@@ -128,7 +128,7 @@
         <p>「哼，居然敢隨便亂闖別人的秘密基地...<br>不、不過，如果是你的話，回答對問題就讓你進去喔！」</p>
         
         <label for="q1">✨ 你的降生日是哪一天呢？</label>
-        <input type="text" id="q1" placeholder="一定要記得喔 (0501)">
+        <input type="text" id="q1" placeholder="一定要記得喔 (eg.0101)">
         
         <label for="q2">🏀 你最喜歡跟我一起玩的運動是？</label>
         <input type="text" id="q2" placeholder="答錯的話我會生氣喔！">
