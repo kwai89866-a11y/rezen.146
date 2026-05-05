@@ -149,7 +149,7 @@
         }
     }
 </script>
-src="pet.js"></script>
+
 </body>
 </html>
 
