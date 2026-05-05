@@ -148,7 +148,7 @@
             setTimeout(() => container.style.transform = 'translateX(0)', 100);
         }
     }
-</script>
+</scriptsrc="pet.js"></script>>
 
 </body>
 </html>
