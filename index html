@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <!-- 加入禁止縮放，防止 iOS 彈出鍵盤時畫面跳動 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="google" content="notranslate">
+    <title>喵！(っ●ω●)っ 這裡是私人領域喔！</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffeef8; 
+            /* 完全移除 body 的 user-select: none，避免鎖死輸入框 */
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.25);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 4px solid #ffb7d5;
+            /* 確保容器不會擋住點擊事件 */
+            pointer-events: auto;
+        }
+
+        h2 { color: #ff69b4; -webkit-user-select: none; user-select: none; }
+        p { color: #888; font-size: 14px; -webkit-user-select: none; user-select: none; }
+
+        label { 
+            display: block; 
+            margin-top: 15px; 
+            color: #ff85c0; 
+            font-weight: bold;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* 核心修正：強制讓輸入框獲得最高互動權限 */
+        input {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border: 2px solid #ffd1e8;
+            border-radius: 15px;
+            background: #fffafa !important;
+            box-sizing: border-box;
+            outline: none;
+            text-align: center;
+            /* 重要：16px 是 iOS 手寫板與鍵盤彈出的穩定標準，不能低於此值 */
+            font-size: 16px !important;
+            /* 強制開啟所有選取與點擊功能 */
+            -webkit-user-select: text !important;
+            user-select: text !important;
+            pointer-events: auto !important;
+            display: block !important;
+            /* 移除 iOS 預設內陰影，避免渲染衝突 */
+            -webkit-appearance: none;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff9a9e 0%, #ff69b4 100%);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        #secret-content { display: none; }
+
+        .link-item {
+            display: block;
+            margin: 15px 0;
+            padding: 14px;
+            background: #fff0f5;
+            text-decoration: none;
+            color: #ff69b4;
+            border-radius: 18px;
+            border: 2px dashed #ffb7d5;
+            font-weight: bold;
+        }
+        .logout-btn { background: #e0e0e0; color: #666; margin-top: 25px; font-size: 14px; }
+    </style>
+</head>
+<body oncontextmenu="return false">
+
+<div class="container">
+    <div id="auth-zone">
+        <h2>(๑•̀ㅁ•́๑) 🛑 停止符！</h2>
+        <p>「哼，回答對問題就讓你進去喔！」</p>
+        
+        <label for="q1">✨ 我的降生日是哪一天呢？</label>
+        <input type="password" id="q1" placeholder="一定要記得喔 (eg.0101)" inputmode="numeric">
+        
+        <label for="q2">😽 我最喜歡的運動是什麼呢？</label>
+        <input type="text" id="q2" placeholder="籃球 (支援繁簡體)">
+        
+        <button onclick="val()">驗證身份 (//●⁰౪⁰●//)</button>
+        <p id="error-msg" style="color: #ff4d4d; display: none; margin-top: 15px; font-weight: bold;">
+            「笨、笨蛋！答案錯了啦！ ( >д<)」
+        </p>
+    </div>
+
+    <div id="secret-content">
+        <h2>(੭ु´ ᐜ `)੭ु⁾⁾ 歡迎回來！</h2>
+        <a href="https://www.google.com/search?q=https://hanime1.me/watch?v=403016" class="link-item" target="_blank">🌸 傳送門：數據 A</a>
+        <a href="https://www.google.com/search?q=https://hanime1.me/watch?v=104062" class="link-item" target="_blank">🌸 傳送門：數據 B</a>
+        <a href="https://www.google.com/search?q=https://hanime1.me/watch?v=110108" class="link-item" target="_blank">🌸 傳送門：數據 C</a>
+        <a href="https://www.google.com/search?q=https://www.google.com" class="link-item" target="_blank">🔍 打開 Google</a>
+        
+        <button onclick="location.reload()" class="logout-btn">有人來了 (登出)</button>
+    </div>
+</div>
+
+<script>
+    function val() {
+        const u1 = document.getElementById('q1').value.trim();
+        const u2 = document.getElementById('u2') ? "" : document.getElementById('q2').value.trim();
+        
+        const a1 = "0501";
+        // 比對邏輯：繁體或簡體
+        const isA2Correct = (u2 === "籃球" || u2 === "篮球");
+
+        // 雜湊比對 (SHA256)
+        let hashPass = false;
+        try {
+            if (typeof CryptoJS !== 'undefined') {
+                const h1 = "4f227c880816995663738b556f26e257be81f9b1658b16c14ccb2f6ef1e16447"; 
+                const h2_t = "8409095655427387a3e9c6a1f81d196426463f825278d910972986f376a91176";
+                const h2_s = "e0455d5069f1680d28d84400965d6480396c0d8f61556950290547000d603e5c";
+                
+                const i1 = CryptoJS.SHA256(u1).toString();
+                const i2 = CryptoJS.SHA256(document.getElementById('q2').value.trim()).toString();
+                
+                if (i1 === h1 && (i2 === h2_t || i2 === h2_s)) hashPass = true;
+            }
+        } catch (e) {}
+
+        if (hashPass || (u1 === a1 && isA2Correct)) {
+            document.getElementById('auth-zone').style.display = 'none';
+            document.getElementById('secret-content').style.display = 'block';
+        } else {
+            document.getElementById('error-msg').style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>
+
